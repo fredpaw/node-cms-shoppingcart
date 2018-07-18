@@ -5,3 +5,7 @@
 .ui-state-highlight {
   border: 1px dashed #ccc;
 }
+
+.ck-content {
+  min-height: 250px;
+}
