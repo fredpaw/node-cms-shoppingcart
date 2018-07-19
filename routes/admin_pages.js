@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var { check, validationResult, body } = require('express-validator/check');
+var { check, validationResult } = require('express-validator/check');
 
 // Get Page Model
 var Page = require('./../models/page');
