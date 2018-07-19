@@ -27,6 +27,30 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Set global erros variables
 app.locals.errors = null;
 
+// Get Page Model
+var Page = require('./models/page');
+
+// Get all pages and pass to header.ejs
+Page.find({}).sort({sorting: 1}).exec(function(err, pages) {
+  if(err) {
+    console.log(err);
+  } else {
+    app.locals.pages = pages;
+  }
+});
+
+// Get Category Model
+var Category = require('./models/category');
+
+// Get all Categories and pass to header.ejs
+Category.find(function(err, categories) {
+  if(err) {
+    console.log(err);
+  } else {
+    app.locals.categories = categories;
+  }
+});
+
 /**
  * Set Middleware
  */
@@ -58,6 +82,7 @@ app.use(function (req, res, next) {
  * Set routes
  */ 
 var pages= require('./routes/pages.js');
+var products= require('./routes/products.js');
 var adminPages= require('./routes/admin_pages.js');
 var adminCategories = require('./routes/admin_categories.js');
 var adminProducts = require('./routes/admin_products.js');
@@ -65,6 +90,7 @@ var adminProducts = require('./routes/admin_products.js');
 app.use('/admin/pages', adminPages);
 app.use('/admin/categories', adminCategories);
 app.use('/admin/products', adminProducts);
+app.use('/products', products);
 app.use('/', pages);
 
 // Start the server
