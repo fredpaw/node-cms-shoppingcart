@@ -1,3 +1,3 @@
 module.exports = {
-  database: 'mongodb://localhost/cmscart'
+  database: 'mongodb://cmscartadmin:cms4node@ds018168.mlab.com:18168/cmscart'
 }

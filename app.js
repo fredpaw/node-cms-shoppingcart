@@ -50,12 +50,14 @@ app.use(function (req, res, next) {
 // Set routes
 var pages= require('./routes/pages.js');
 var adminPages= require('./routes/admin_pages.js');
+var adminCategories = require('./routes/admin_categories.js');
 
 app.use('/admin/pages', adminPages);
+app.use('/admin/categories', adminCategories);
 app.use('/', pages);
 
 // Start the server
 var port = 3000;
 app.listen(port, function() {
-  console.log('Server started on port' + port);
+  console.log('Server started on port ' + port);
 });
