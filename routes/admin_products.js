@@ -5,6 +5,8 @@ var { check, validationResult } = require('express-validator/check');
 var mkdirp = require('mkdirp');
 var fs = require('fs-extra');
 var resizeImg = require('resize-img');
+var auth = require('./../config/auth');
+var isAdmin = auth.isAdmin;
 
 // Get Product Model
 var Product = require('./../models/product');
@@ -14,7 +16,7 @@ var Category = require('./../models/category');
 /**
  * Get products index
  */
-router.get('/', function(req, res) {
+router.get('/', isAdmin, function(req, res) {
   var count;
 
   Product.count(function(err, c) {
@@ -32,7 +34,7 @@ router.get('/', function(req, res) {
 /**
  * Get add product
  */
-router.get('/add-product', function(req, res) {
+router.get('/add-product', isAdmin, function(req, res) {
   var title = "";
   var desc = "";
   var price = "";
@@ -147,7 +149,7 @@ router.post('/add-product', [
 /**
  * Get edit product
  */
-router.get('/edit-product/:id', function(req, res) {
+router.get('/edit-product/:id', isAdmin, function(req, res) {
   var errors;
   
   if(req.session.errors) errors = req.session.errors;
@@ -302,7 +304,7 @@ router.post('/product-gallery/:id', function(req, res) {
 /**
  * Get delete gallery image
  */
-router.get('/delete-image/:image', function(req, res) {
+router.get('/delete-image/:image', isAdmin, function(req, res) {
   var galleryPath = 'public/product_images/' + req.query.id + '/gallery/' + req.params.image;
   var thumbPath = 'public/product_images/' + req.query.id + '/gallery/thumbs/' + req.params.image;
 
@@ -325,7 +327,7 @@ router.get('/delete-image/:image', function(req, res) {
 /**
  * Get delete product
  */
-router.get('/delete-product/:id', function(req, res) {
+router.get('/delete-product/:id', isAdmin, function(req, res) {
   var id = req.params.id;
   var productPath = 'public/product_images/' + id;
 

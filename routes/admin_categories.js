@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var { check, validationResult } = require('express-validator/check');
+var auth = require('./../config/auth');
+var isAdmin = auth.isAdmin;
 
 // Get Category Model
 var Category = require('./../models/category');
@@ -8,7 +10,7 @@ var Category = require('./../models/category');
 /**
  * Get categories index
  */
-router.get('/', function(req, res) {
+router.get('/', isAdmin, function(req, res) {
   Category.find(function(err, categories) {
     if(err) console.log(err);
 
@@ -21,7 +23,7 @@ router.get('/', function(req, res) {
 /**
  * Get add category
  */
-router.get('/add-category', function(req, res) {
+router.get('/add-category', isAdmin, function(req, res) {
   var title = "";
 
   res.render('admin/add_category', {
@@ -80,7 +82,7 @@ router.post('/add-category', [
 /**
  * Get edit category
  */
-router.get('/edit-category/:id', function(req, res) {
+router.get('/edit-category/:id', isAdmin, function(req, res) {
   Category.findById(req.params.id, function(err, category) {
     if(err) return console.log(err);
     
@@ -148,7 +150,7 @@ router.post('/edit-category/:id', [
 /**
  * Get delete category
  */
-router.get('/delete-category/:id', function(req, res) {
+router.get('/delete-category/:id', isAdmin, function(req, res) {
   Category.findByIdAndRemove(req.params.id, function(err) {
     if(err) return console.log(err);
 
