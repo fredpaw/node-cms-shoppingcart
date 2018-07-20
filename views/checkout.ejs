@@ -33,14 +33,57 @@
     <td colspan="6" align="right"><b>Total: $<%= parseFloat(total).toFixed(2) %></b></td>
   </tr>
   <tr>
-    <td colspan="5" align="right">
-      <a href="/cart/clear" class="btn btn-danger clearcart">Clear Cart</a>
+    <td align="left">
+      <a href="/cart/buynow" class="btn btn-danger clearcart">Clear Cart</a>
     </td>
-    <td align="right">
-        <a href="#" class="btn btn-primary buynow">Buy Now</a>
-      </td>
+    <td colspan="5" align="right">
+      <!-- <a href="#" class="btn btn-primary buynow">Buy Now</a> -->
+      <div id="paypal-button"></div>
+    </td>
   </tr>
 </table>
+
+<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+<script>
+paypal.Button.render({
+  // Configure environment
+  env: 'sandbox',
+  client: {
+    sandbox: 'AZBfzqKxxIdleVNWcPYAgT8ejP16vo-_tVRCqtlbVL1Sa7-u533klElZrgGmNbfi1vXyLNgQgVDEaKj0'
+  },
+  // Customize button (optional)
+  locale: 'en_AU',
+  style: {
+    size: 'medium',
+    color: 'blue',
+    shape: 'rect',
+    label: 'buynow'
+  },
+  // Set up a payment
+  payment: function (data, actions) {
+    return actions.payment.create({
+      transactions: [{
+        amount: {
+          total: '<%= parseFloat(total).toFixed(2) %>',
+          currency: 'AUD'
+        }
+      }]
+    });
+  },
+  // Execute the payment
+  onAuthorize: function (data, actions) {
+    return actions.payment.execute()
+      .then(function () {
+        // Show a confirmation message to the buyer
+        window.alert('Thanks for your purchase!');
+        $.get('/cart/buynow', function() {
+          window.location.href = '/cart/checkout';
+        });
+      });
+  }
+}, '#paypal-button');
+</script>
+
 <% } else { %>
   <h3 class="text-center">Your cart is empty.</h3>
 <% } %>
@@ -51,6 +94,7 @@
       if(!confirm('Confirm clear cart')) return false;
     });
   });
+
 </script>
 
 <% include _layouts/footer %>
